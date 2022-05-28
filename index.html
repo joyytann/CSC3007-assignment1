@@ -31,8 +31,6 @@ function addLeadingZeros(num, totalLength) {
 
 function getdata(){
 
-    // todayDate = new Date();
-    // todayDate.toISOString().split('T')[0]
     document.getElementById("todayDate").innerHTML = formatDate();
     var url = "https://api.data.gov.sg/v1/environment/psi";
     fetch(url).then(response => {
@@ -63,12 +61,9 @@ function getdata(){
             northCell.innerHTML = keyvalue[i].north;
             southCell.innerHTML = keyvalue[i].south;
 
-            //   console.log("key",Object.keys(object)[i]);   
-            //   console.log("west",keyvalue[i].west);
-            //   console.log("national",keyvalue[i].national);
+       
           }
-          //console.log(j.west)
-      
+       
     }).catch(err => {
       // Do something for an error here
     });

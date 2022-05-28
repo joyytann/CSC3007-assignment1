@@ -1,0 +1,107 @@
+<script type="text/javascript">
+
+
+function formatDate() {
+
+let monthNames =["Jan","Feb","Mar","Apr",
+                  "May","Jun","Jul","Aug",
+                  "Sep", "Oct","Nov","Dec"];
+
+todayDate = new Date();
+let day = todayDate.getDate();
+
+let monthIndex = todayDate.getMonth();
+let monthName = monthNames[monthIndex];
+
+let year = todayDate.getFullYear();
+
+let hour = todayDate.getHours();
+
+let minute = todayDate.getMinutes();
+
+
+return `${day} ${monthName} ${year}, ${hour}:${addLeadingZeros(minute,2)}`;  
+}
+
+function addLeadingZeros(num, totalLength) {
+  return String(num).padStart(totalLength, '0');
+}
+
+
+
+function getdata(){
+
+    // todayDate = new Date();
+    // todayDate.toISOString().split('T')[0]
+    document.getElementById("todayDate").innerHTML = formatDate();
+    var url = "https://api.data.gov.sg/v1/environment/psi";
+    fetch(url).then(response => {
+      return response.json();
+    }).then(data => {
+      // Work with JSON data here
+      var object = data.items[0].readings;
+      keyvalue = Object.values(object);
+  
+     var tableelement = document.getElementById("weatherdata");
+    
+          for(var i = 0; i<keyvalue.length; i++)
+          {
+            var row = tableelement.insertRow();
+            var metricCell = row.insertCell(0);
+            var nationalCell = row.insertCell(1);
+            var centralCell = row.insertCell(2);
+            var westCell = row.insertCell(3);
+            var eastCell = row.insertCell(4);
+            var northCell = row.insertCell(5);
+            var southCell = row.insertCell(5);
+
+            metricCell.innerHTML = Object.keys(object)[i];
+            nationalCell.innerHTML = keyvalue[i].national;
+            centralCell.innerHTML = keyvalue[i].central;
+            westCell.innerHTML = keyvalue[i].west;
+            eastCell.innerHTML = keyvalue[i].east;
+            northCell.innerHTML = keyvalue[i].north;
+            southCell.innerHTML = keyvalue[i].south;
+
+            //   console.log("key",Object.keys(object)[i]);   
+            //   console.log("west",keyvalue[i].west);
+            //   console.log("national",keyvalue[i].national);
+          }
+          //console.log(j.west)
+      
+    }).catch(err => {
+      // Do something for an error here
+    });
+
+};
+
+</script>
+
+<html>
+    <head>
+        <link rel="stylesheet" href="index.css">
+
+    </head>
+    <body onload="getdata()">
+      <div class="date">
+        Last Updated on <span id="todayDate"></span>
+      </div>
+      
+       <table id="weatherdata">
+           <tr>
+                <th>Metric</th>
+                <th>National</th>
+                <th>Central</th>
+                <th>West</th>
+                <th>East</th>
+                <th>North</th>
+                <th>South</th>
+           </tr>
+           
+          
+       </table>
+        
+
+    </body>
+
+</html>
